@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Sudoku
+﻿namespace Sudoku
 {
 	public static partial class Technique
 	{
@@ -37,7 +35,7 @@ namespace Sudoku
 			var y2 = region.GetCellsWithCandidate(candidates[1]).Except(cells).ToList();
 			y2.ForEach(x => x.Candidates.Remove(candidates[1]));
 			if (y1.Count == 0 && y2.Count == 0) return false;
-			Debug.WriteLine($"Naked pair ({cells[0].Name}, {cells[1].Name}): ({string.Join(", ", candidates)})");
+			//Debug.WriteLine($"Naked pair ({cells[0].Name}, {cells[1].Name}): ({string.Join(", ", candidates)})");
 			return true;
 		}
 	}

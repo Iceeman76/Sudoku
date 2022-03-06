@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Sudoku
+﻿namespace Sudoku
 {
 	public static partial class Technique
 	{
@@ -11,9 +9,8 @@ namespace Sudoku
 
 			nakedSingles.ForEach(cell =>
 			{
-				if (cell.Candidates.Count != 1) return;
 				cell.Value = cell.Candidates.Values.Single();
-				Debug.WriteLine($"Naked single {cell.Name}:{cell.Value}");
+				//Debug.WriteLine($"Naked single {cell.Name}:{cell.Value}");
 			});
 
 			return true;

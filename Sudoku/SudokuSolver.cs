@@ -22,8 +22,8 @@
 				if (Technique.NakedSingles(emptyCells)) continue;
 				if (Technique.HiddenSingles(emptyCells)) continue;
 
-				if (Technique.NakedPair(Board)) continue;
-				if (Technique.HiddenPair(Board)) continue;
+				//if (Technique.NakedPair(Board)) continue;
+				//if (Technique.HiddenPair(Board)) continue;
 
 				Technique.Backtracking(Board);
 

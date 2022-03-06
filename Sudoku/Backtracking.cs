@@ -11,19 +11,19 @@
 
 		private static bool Solve(Board board)
 		{
-			var c = board.GetAllEmptyCells().OrderBy(x => x.Candidates.Count).FirstOrDefault();
-			if (c == null) return true;
-			if (c.Candidates.Count == 0) return false;
+			var cell = board.GetAllEmptyCells().OrderBy(x => x.Candidates.Count).FirstOrDefault();
+			if (cell == null) return true;
+			if (cell.Candidates.Count == 0) return false;
 		
-			foreach (var value in c.Candidates.Values)
+			foreach (var value in cell.Candidates.Values)
 			{
 				StepCounter++;
 		
-				c.Value = value;
+				cell.Value = value;
 		
 				if (Solve(board)) return true;
 		
-				c.Value = 0;
+				cell.Value = 0;
 			}
 		
 			return false;

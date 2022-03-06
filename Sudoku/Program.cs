@@ -9,14 +9,15 @@ namespace Sudoku
 		private static float SolvePuzzle(Puzzle puzzle, int puzzleNumber = 0)
 		{
 			var sudoku = new SudokuSolver(puzzle);
-			Debug.WriteLine(sudoku.Board.ToDisplayString());
+			//Debug.WriteLine(sudoku.Board.ToDisplayString());
 			StaticStopwatch.Restart();
 			sudoku.Solve();
 			StaticStopwatch.Stop();
-			Debug.WriteLine(sudoku.Board.ToDisplayString());
+			//Debug.WriteLine(sudoku.Board.ToDisplayString());
 			var t = StaticStopwatch.ElapsedNanoSeconds();
 			var str = puzzle.Solved ? puzzle.Solution : puzzle.Original;
-			Console.WriteLine($"Puzzle #{puzzleNumber:00} - t={t / 1000000:0000.00} -> {puzzle.Solved} -> {str} -> StepCounter: {Technique.StepCounter}");
+			if (Technique.StepCounter < 400) return t;
+			Console.WriteLine($"Puzzle #{puzzleNumber:0000000} - t={t / 1000000:0000.00} -> {puzzle.Solved} -> {str} -> StepCounter: {Technique.StepCounter}");
 			return t;
 		}
 
@@ -50,6 +51,7 @@ namespace Sudoku
 
 		public static void Main(string[] args)
 		{
+			var sw = Stopwatch.StartNew();
 			if (args.Length == 1)
 			{
 				SolvePuzzle(new Puzzle(args[0]));
@@ -59,7 +61,8 @@ namespace Sudoku
 			//SolveFile("Puzzles\\Easy50.txt", 50);
 			//SolveFile("Puzzles\\Top95.txt", 95);
 			//SolvePuzzle(new Puzzle("040000179002008054006005008080070910050090030019060040300400700570100200928000060"));
-			SolveFile("C:\\Temp\\sudoku.csv", 1000);
+			SolveFile("C:\\Temp\\sudoku.csv", 10000);
+			Console.WriteLine($"Total execution time: {sw.ElapsedMilliseconds}");
 		}
 	}
 }

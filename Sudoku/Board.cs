@@ -58,7 +58,7 @@ namespace Sudoku
 			for (var i = 0; i < 81; i++)
 			{
 				this[i].CreateRegions();
-				this[i].Value = puzzle[i];
+				if (puzzle[i] > 0) this[i].Value = puzzle[i];
 			}
 		}
 

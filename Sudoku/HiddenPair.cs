@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Sudoku
+﻿namespace Sudoku
 {
 	public static partial class Technique
 	{
@@ -41,7 +39,7 @@ namespace Sudoku
 					if (candidates.Count != 2) continue;
 					cells[0].Candidates = new Bitmask().SetValue(candidates[0]).SetValue(candidates[1]);
 					cells[1].Candidates = new Bitmask().SetValue(candidates[0]).SetValue(candidates[1]);
-					Debug.WriteLine($"Hidden pair ({cells[0].Name}, {cells[1].Name}): ({string.Join(", ", candidates)})");
+					//Debug.WriteLine($"Hidden pair ({cells[0].Name}, {cells[1].Name}): ({string.Join(", ", candidates)})");
 					return true;
 				}
 			}
