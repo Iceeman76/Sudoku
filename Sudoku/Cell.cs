@@ -4,11 +4,11 @@ namespace Sudoku
 {
 	public class Cell
 	{
-		public ReadOnlyCollection<Region> Regions { get; private set; }
+		public ReadOnlyCollection<Region>? Regions { get; private set; }
 		public Bitmask Candidates { get; set; } = Bitmask.All;
-		public string Name => $"{(char)(Index.RowIndex() + 'A')}{Index.ColumnIndex() + 1}";
 		public int Index { get; init; }
 
+		private string Name => $"{(char)(Index.RowIndex() + 'A')}{Index.ColumnIndex() + 1}";
 		private Region Row => _board.Rows[Index.RowIndex()];
 		private Region Column => _board.Columns[Index.ColumnIndex()];
 		private Region Block => _board.Blocks[Index.BlockIndex()];
@@ -31,7 +31,7 @@ namespace Sudoku
 
 				Candidates.Clear();
 
-				foreach (var region in Regions)
+				foreach (var region in Regions!)
 				{
 					region.RemoveCandidate(value);
 				}
@@ -43,7 +43,7 @@ namespace Sudoku
 			// Use this only when backtracking is applied
 			_value = 0;
 
-			foreach (var region in Regions)
+			foreach (var region in Regions!)
 			{
 				region.CalculateCandidates();
 			}

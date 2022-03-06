@@ -34,10 +34,10 @@ namespace Sudoku
 			return _cells.Where(x => x.Candidates.Contains(candidate));
 		}
 		
-		public IEnumerable<Cell> GetCellsWithAllCandidates(params int[] candidates)
-		{
-			return _cells.Where(x => x.Candidates.ContainsAll(candidates));
-		}
+		// public IEnumerable<Cell> GetCellsWithAllCandidates(params int[] candidates)
+		// {
+		// 	return _cells.Where(x => x.Candidates.ContainsAll(candidates));
+		// }
 
 		public IEnumerator<Cell> GetEnumerator() => ((IEnumerable<Cell>)_cells).GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => _cells.GetEnumerator();

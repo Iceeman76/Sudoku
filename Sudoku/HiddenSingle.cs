@@ -19,9 +19,9 @@
 
 		private static bool FindHiddenSingle(Cell cell, int value)
 		{
-			foreach (var region in cell.Regions)
+			foreach (var region in cell.Regions!)
 			{
-				if (region.GetCellsWithAllCandidates(value).Count() != 1) continue;
+				if (region.GetCellsWithCandidate(value).Count() != 1) continue;
 				cell.Value = value;
 				//Debug.WriteLine($"Hidden single {cell.Name}:{value}");
 				return true;

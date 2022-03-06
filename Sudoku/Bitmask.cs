@@ -15,7 +15,7 @@
 				Value |= 1 << value;
 			}
 		}
-		
+
 		public Bitmask SetValue(int value)
 		{
 			Value |= 1 << value;
@@ -25,16 +25,16 @@
 		public void Remove(int value) => Value &= ~(1 << value);
 		public bool Contains(int value) => ((Value >> value) & 1) == 1;
 
-		public bool ContainsAll(params int[] values)
-		{
-			// This method can be optimized by using bit operations instead
-			foreach (var value in values)
-			{
-				if (!Contains(value)) return false;
-			}
-
-			return true;
-		}
+		// public bool ContainsAll(params int[] values)
+		// {
+		// 	// This method can be optimized by using bit operations instead
+		// 	foreach (var value in values)
+		// 	{
+		// 		if (!Contains(value)) return false;
+		// 	}
+		//
+		// 	return true;
+		// }
 
 		public IEnumerable<int> Values
 		{
@@ -69,8 +69,8 @@
 		}
 
 		public override int GetHashCode() => Value.GetHashCode();
-		public override bool Equals(object obj) => Equals(obj as Bitmask);
-		private bool Equals(Bitmask b) => Value == b.Value;
+		public override bool Equals(object? obj) => Equals(obj as Bitmask);
+		private bool Equals(Bitmask? b) => Value == b!.Value;
 
 		public static bool operator !=(Bitmask a, Bitmask b) => !(a == b);
 		public static bool operator ==(Bitmask a, Bitmask b) => a.Value == b.Value;
