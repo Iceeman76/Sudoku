@@ -62,7 +62,8 @@ namespace Sudoku
 			//SolveFile("Puzzles\\Easy50.txt", 50);
 			//SolveFile("Puzzles\\Top95.txt", 95);
 			//SolvePuzzle(new Puzzle("040000179002008054006005008080070910050090030019060040300400700570100200928000060"));
-			SolveFile("C:\\Temp\\sudoku.csv", 100000);
+			//SolveFile("C:\\Temp\\sudoku.csv", 100000);
+			SolveFile("Puzzles\\49151.txt", 49151);
 			Console.WriteLine($"Total execution time: {sw.ElapsedMilliseconds}");
 		}
 	}

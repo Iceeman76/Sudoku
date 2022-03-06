@@ -19,11 +19,11 @@
 				var emptyCells = Board.GetAllEmptyCells().ToArray();
 				if (emptyCells.Length == 0) break;
 
-				if (Technique.NakedSingles(emptyCells)) continue;
-				if (Technique.HiddenSingles(emptyCells)) continue;
-
-				//if (Technique.NakedPair(Board)) continue;
-				//if (Technique.HiddenPair(Board)) continue;
+				// if (Technique.NakedSingles(emptyCells)) continue;
+				// if (Technique.HiddenSingles(emptyCells)) continue;
+				//
+				// if (Technique.NakedPair(Board)) continue;
+				// if (Technique.HiddenPair(Board)) continue;
 
 				Technique.Backtracking(Board);
 
