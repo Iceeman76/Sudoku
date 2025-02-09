@@ -1,36 +1,31 @@
-﻿namespace Sudoku
+﻿using Sudoku.Techniques;
+
+namespace Sudoku;
+
+public static class SudokuSolver
 {
-	public class SudokuSolver
-	{
-		public readonly Board Board;
-		private readonly Puzzle _puzzle;
+    public static Board Solve(Puzzle puzzle)
+    {
+        var board = new Board(puzzle);
 
-		public SudokuSolver(Puzzle puzzle)
-		{
-			Technique.StepCounter = 0;
-			Board = new Board(puzzle);
-			_puzzle = puzzle;
-		}
+        while (true)
+        {
+            var emptyCells = board.GetAllEmptyCells().ToArray();
 
-		public void Solve()
-		{
-			while (true)
-			{
-				var emptyCells = Board.GetAllEmptyCells().ToArray();
-				if (emptyCells.Length == 0) break;
+            if (emptyCells.Length == 0) break;
 
-				// if (Technique.NakedSingles(emptyCells)) continue;
-				// if (Technique.HiddenSingles(emptyCells)) continue;
-				//
-				// if (Technique.NakedPair(Board)) continue;
-				// if (Technique.HiddenPair(Board)) continue;
+            if (Technique.NakedSingles(emptyCells)) continue;
+            if (Technique.HiddenSingles(emptyCells)) continue;
+            if (Technique.NakedPair(board)) continue;
+            if (Technique.HiddenPair(board)) continue;
 
-				Technique.Backtracking(Board);
+            Technique.Backtracking(board);
 
-				break;
-			}
+            break;
+        }
 
-			_puzzle.Solution = Board.ToAnnotationString();
-		}
-	}
+        puzzle.Solution = board.ToAnnotationString();
+
+        return board; // TODO: Bättre vi gör ett nytt objekt som heter Solution som vi kan slänga in lite olika saker i och returnera
+    }
 }

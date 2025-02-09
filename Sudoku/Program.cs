@@ -1,70 +1,145 @@
 ﻿using System.Diagnostics;
 
-namespace Sudoku
+namespace Sudoku;
+
+public record Line
 {
-	public static class Program
-	{
-		private static readonly Stopwatch StaticStopwatch = new();
+    public Line(string str)
+    {
+        var tuple = str.Split(',');
 
-		private static float SolvePuzzle(Puzzle puzzle, int puzzleNumber = 0)
-		{
-			var sudoku = new SudokuSolver(puzzle);
-			//Debug.WriteLine(sudoku.Board.ToDisplayString());
-			StaticStopwatch.Restart();
-			sudoku.Solve();
-			StaticStopwatch.Stop();
-			//Debug.WriteLine(sudoku.Board.ToDisplayString());
-			var t = StaticStopwatch.ElapsedNanoSeconds();
-			var str = puzzle.Solved ? puzzle.Solution : puzzle.Original;
-			if (Technique.StepCounter < 400) return t;
-			Console.WriteLine($"Puzzle #{puzzleNumber:0000000} - t={t / 1000000:0000.00} -> {puzzle.Solved} -> {str} -> StepCounter: {Technique.StepCounter}");
-			return t;
-		}
+        PuzzleString = tuple[0];
+        SolutionString = tuple.Length > 1 ? tuple[1] : null;
+    }
 
-		private static void SolveFile(string fileName, int num)
-		{
-			var totalStepCounter = 0;
-			var totalTime = 0f;
-			var numSolved = 0;
-			var lines = File.ReadLines(fileName).Take(num).ToArray();
+    public string PuzzleString { get; }
+    public string? SolutionString { get; }
+}
 
-			for (var i = 0; i < lines.Length; i++)
-			{
-				var line = lines[i];
-				var tuple = line.Split(',');
-				var puzzle = new Puzzle(tuple[0]);
-				if (!puzzle.Valid) continue;
-				totalTime += SolvePuzzle(puzzle, i + 1);
-				totalStepCounter += Technique.StepCounter;
+public static class Program
+{
+    private static void SolveFileA(string fileName, int num, int threadCount = 1)
+    {
+        var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
+        var sw = Stopwatch.StartNew();
 
-				if (puzzle.Solved)
-				{
-					numSolved++;
-					if (tuple.Length > 1 && puzzle.Solution != tuple[1]) throw new Exception("Wrong solution");
-				}
-			}
+        Parallel.ForEach(lines, new ParallelOptions { MaxDegreeOfParallelism = threadCount }, (line, _, index) =>
+        {
+            var puzzle = new Puzzle(line.PuzzleString);
 
-			Console.WriteLine(new string('-', 140));
-			Console.WriteLine($"Total:     - T={totalTime / 1000000:00.00}, Solved {numSolved} / {lines.Length}, Steps={totalStepCounter}");
-			Console.WriteLine(new string('-', 140));
-		}
+            SudokuSolver.Solve(puzzle);
 
-		public static void Main(string[] args)
-		{
-			var sw = Stopwatch.StartNew();
+            if (index % 10000 == 0)
+            {
+                Console.WriteLine($"{Environment.CurrentManagedThreadId:00}: Puzzle #{index:0000000} - {puzzle.Solution}");
+            }
 
-			if (args.Length == 1)
-			{
-				SolvePuzzle(new Puzzle(args[0]));
-				return;
-			}
+            //if (tuple.Length > 1 && puzzle.Solution != tuple[1]) throw new Exception("Wrong solution");
+        });
 
-			//SolveFile("Puzzles\\Easy50.txt", 50);
-			//SolveFile("Puzzles\\Top95.txt", 95);
-			//SolvePuzzle(new Puzzle("040000179002008054006005008080070910050090030019060040300400700570100200928000060"));
-			//SolveFile("C:\\Temp\\sudoku.csv", 100000);
-			SolveFile("Puzzles\\49151.txt", 49151);
-			Console.WriteLine($"Total execution time: {sw.ElapsedMilliseconds}");
-		}
-	}
+        Console.WriteLine(new string('-', 104));
+        Console.WriteLine($"Total solution time (s): {sw.ElapsedMilliseconds / 1000.0}");
+        Console.WriteLine(new string('-', 104));
+    }
+
+    private static void SolveFileB(string fileName, int num, int threadCount = 1)
+    {
+        var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
+        var sw = Stopwatch.StartNew();
+
+        Parallel.For(0, threadCount, new ParallelOptions { MaxDegreeOfParallelism = threadCount }, threadIndex =>
+        {
+            for (var index = threadIndex; index < lines.Length; index += threadCount)
+            {
+                var puzzle = new Puzzle(lines[index].PuzzleString);
+
+                SudokuSolver.Solve(puzzle);
+
+                if (index % 10000 == 0)
+                {
+                    Console.WriteLine($"{Environment.CurrentManagedThreadId:00}: Puzzle #{index:0000000} - {puzzle.Solution}");
+                }
+
+                //if (tuple.Length > 1 && puzzle.Solution != tuple[1]) throw new Exception("Wrong solution");
+            }
+        });
+
+        Console.WriteLine(new string('-', 104));
+        Console.WriteLine($"Total solution time (s): {sw.ElapsedMilliseconds / 1000.0}");
+        Console.WriteLine(new string('-', 104));
+    }
+
+    private static async Task SolveFileC(string fileName, int num, int threadCount)
+    {
+        var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
+        var sw = Stopwatch.StartNew();
+
+        var tasks = new List<Task>();
+
+        for (var threadIndex = 0; threadIndex < threadCount; threadIndex++)
+        {
+            var indexCopy = threadIndex;
+
+            tasks.Add(Task.Run(() =>
+            {
+                for (var index = indexCopy; index < lines.Length; index += threadCount)
+                {
+                    var puzzle = new Puzzle(lines[index].PuzzleString);
+
+                    SudokuSolver.Solve(puzzle);
+
+                    if (index % 10000 == 0)
+                    {
+                        Console.WriteLine($"{Environment.CurrentManagedThreadId:00}: Puzzle #{index:0000000} - {puzzle.Solution}");
+                    }
+
+                    //if (tuple.Length > 1 && puzzle.Solution != tuple[1]) throw new Exception("Wrong solution");
+                }
+            }));
+        }
+
+        await Task.WhenAll(tasks);
+
+        Console.WriteLine(new string('-', 104));
+        Console.WriteLine($"Total solution time (s): {sw.ElapsedMilliseconds / 1000.0}");
+        Console.WriteLine(new string('-', 104));
+    }
+
+    private static void SolveFileD(string fileName, int num)
+    {
+        var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
+        var sw = Stopwatch.StartNew();
+
+        for (var index = 0; index < lines.Length; index++)
+        {
+            var line = lines[index];
+            var puzzle = new Puzzle(line.PuzzleString);
+
+            SudokuSolver.Solve(puzzle);
+
+            if (index % 10000 == 0)
+            {
+                Console.WriteLine($"{Environment.CurrentManagedThreadId:00}: Puzzle #{index:0000000} - {puzzle.Solution}");
+            }
+
+            //if (tuple.Length > 1 && puzzle.Solution != tuple[1]) throw new Exception("Wrong solution");
+        }
+
+        Console.WriteLine(new string('-', 104));
+        Console.WriteLine($"Total solution time (s): {sw.ElapsedMilliseconds / 1000.0}");
+        Console.WriteLine(new string('-', 104));
+    }
+
+    public static void Main()
+    {
+        //SolveFile("Puzzles\\Easy50.txt", 50);
+        //SolveFile("Puzzles\\Top95.txt", 95);
+        //SolvePuzzle(new Puzzle("040000179002008054006005008080070910050090030019060040300400700570100200928000060"));
+        //SolveFile("Puzzles\\49151.txt", 49151);
+
+        SolveFileA(@"C:\Temp\sudoku.csv", 100_000, 4);
+        SolveFileB(@"C:\Temp\sudoku.csv", 100_000, 4);
+        SolveFileC(@"C:\Temp\sudoku.csv", 100_000, 4).GetAwaiter().GetResult();
+        SolveFileD(@"C:\Temp\sudoku.csv", 100_000);
+    }
 }
