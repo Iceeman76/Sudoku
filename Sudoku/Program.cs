@@ -25,6 +25,7 @@ public static class Program
 
         var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
         var sw = Stopwatch.StartNew();
+        var interval = num / 20;
 
         Parallel.For(0, threadCount, new ParallelOptions { MaxDegreeOfParallelism = threadCount }, threadIndex =>
         {
@@ -34,7 +35,7 @@ public static class Program
 
                 SudokuSolver.Solve(puzzle);
 
-                if (index % 10000 == 0)
+                if (index % interval == 0)
                 {
                     Console.WriteLine($"Puzzle #{index:0000000} - {puzzle.Solution}");
                 }
@@ -54,8 +55,7 @@ public static class Program
         var puzzleCount = args.Length >= 2 ? int.Parse(args[1]) : 100_000;
 
         //SolveFile("Puzzles\\Easy50.txt", 50);
-        //SolveFile("Puzzles\\Top95.txt", 95);
-        //SolvePuzzle(new Puzzle("040000179002008054006005008080070910050090030019060040300400700570100200928000060"));
+        //SolveFile("Puzzles\\Top95.txt", 95, 4);
         //SolveFile("Puzzles\\49151.txt", 49151);
 
         SolveFile(@"C:\Temp\sudoku.csv", puzzleCount, threadCount);
