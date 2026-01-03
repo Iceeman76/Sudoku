@@ -20,6 +20,7 @@ public static class Program
 {
     private static void SolveFile(string fileName, int num, int threadCount = 1)
     {
+        Console.WriteLine($"File: {fileName}");
         Console.WriteLine($"Thread count: {threadCount}");
         Console.WriteLine($"Puzzle count: {num}");
 
@@ -54,10 +55,6 @@ public static class Program
         var threadCount = args.Length >= 1 ? int.Parse(args[0]) : 4;
         var puzzleCount = args.Length >= 2 ? int.Parse(args[1]) : 100_000;
 
-        //SolveFile("Puzzles\\Easy50.txt", 50);
-        //SolveFile("Puzzles\\Top95.txt", 95, 4);
-        //SolveFile("Puzzles\\49151.txt", 49151);
-
-        SolveFile(@"C:\Temp\sudoku.csv", puzzleCount, threadCount);
+        SolveFile(@".\sudoku.csv", puzzleCount, threadCount);
     }
 }
