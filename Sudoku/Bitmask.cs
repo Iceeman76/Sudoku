@@ -1,10 +1,16 @@
 ﻿namespace Sudoku;
 
-public class Bitmask
+public record Bitmask
 {
     public static Bitmask All => new(1022);
 
     public int Value { get; private set; }
+
+    public Bitmask()
+    {
+    }
+
+    private Bitmask(int value) => Value = value;
 
     public void Clear() => Value = 0;
 
@@ -58,22 +64,6 @@ public class Bitmask
             return (i + (i >> 4) & 0x0F0F0F0F) * 0x01010101 >> 24;
         }
     }
-
-    public Bitmask()
-    {
-    }
-
-    private Bitmask(int value)
-    {
-        Value = value;
-    }
-
-    public override int GetHashCode() => Value.GetHashCode();
-    public override bool Equals(object? obj) => Equals(obj as Bitmask);
-    private bool Equals(Bitmask? b) => Value == b!.Value;
-
-    public static bool operator !=(Bitmask a, Bitmask b) => !(a == b);
-    public static bool operator ==(Bitmask a, Bitmask b) => a.Value == b.Value;
 
     public static Bitmask operator &(Bitmask a, Bitmask b) => new(a.Value & b.Value);
 }
