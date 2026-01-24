@@ -1,10 +1,8 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Sudoku;
+﻿namespace Sudoku;
 
 public class Cell
 {
-    public ReadOnlyCollection<Region>? Regions { get; private set; }
+    public Region[] Regions { get; private set; }
     public Bitmask Candidates { get; set; } = Bitmask.All;
     public int Index { get; init; }
 
@@ -43,7 +41,7 @@ public class Cell
         // Use this only when backtracking is applied
         _value = 0;
 
-        foreach (var region in Regions!)
+        foreach (var region in Regions)
         {
             region.CalculateCandidates();
         }
@@ -58,6 +56,6 @@ public class Cell
     }
 
     public Cell(Board board) => _board = board;
-    public void CreateRegions() => Regions = new ReadOnlyCollection<Region>([Row, Column, Block]);
+    public void CreateRegions() => Regions = [Row, Column, Block];
     public override string ToString() => Name;
 }
