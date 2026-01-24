@@ -1,18 +1,17 @@
 ﻿namespace Sudoku;
 
-public class Cell
+public class Cell(Board board)
 {
-    public Region[] Regions { get; private set; }
+    public Region[] Regions { get; private set; } = null!;
     public Bitmask Candidates { get; set; } = Bitmask.All;
     public int Index { get; init; }
 
     private string Name => $"{(char)(Index.RowIndex() + 'A')}{Index.ColumnIndex() + 1}";
-    private Region Row => _board.Rows[Index.RowIndex()];
-    private Region Column => _board.Columns[Index.ColumnIndex()];
-    private Region Block => _board.Blocks[Index.BlockIndex()];
+    private Region Row => board.Rows[Index.RowIndex()];
+    private Region Column => board.Columns[Index.ColumnIndex()];
+    private Region Block => board.Blocks[Index.BlockIndex()];
 
     private int _value;
-    private readonly Board _board;
 
     public int Value
     {
@@ -51,11 +50,11 @@ public class Cell
     {
         Candidates.Clear();
         if (Value > 0) return;
-        var candidates = _board.GetCandidates(Index);
-        Candidates.SetValues(candidates);
+
+        var mask = board.GetCandidatesMask(Index);
+        Candidates.SetMask(mask);
     }
 
-    public Cell(Board board) => _board = board;
     public void CreateRegions() => Regions = [Row, Column, Block];
     public override string ToString() => Name;
 }

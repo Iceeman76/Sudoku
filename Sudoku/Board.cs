@@ -10,7 +10,6 @@ public class Board : IEnumerable<Cell>
     public Region[] Blocks { get; } = new Region[9];
 
     private readonly Cell[] _grid = new Cell[81];
-    private static readonly int[] OneToNine = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     public Board(Puzzle puzzle)
     {
@@ -19,20 +18,26 @@ public class Board : IEnumerable<Cell>
         SetValues(puzzle);
     }
 
-    public IEnumerable<Cell> GetAllEmptyCells() => _grid.Where(x => x.Value == 0);
-
-    public IEnumerable<int> GetCandidates(int index)
+    public List<Cell> GetAllEmptyCells()
     {
-        var row = Rows[index.RowIndex()].Where(x => x.Value > 0).Select(x => x.Value);
-        var column = Columns[index.ColumnIndex()].Where(x => x.Value > 0).Select(x => x.Value);
-        var block = Blocks[index.BlockIndex()].Where(x => x.Value > 0).Select(x => x.Value);
+        var emptyCells = new List<Cell>();
+        for (var i = 0; i < 81; i++)
+        {
+            if (_grid[i].Value == 0) emptyCells.Add(_grid[i]);
+        }
 
-        var candidates = OneToNine
-            .Except(row)
-            .Except(column)
-            .Except(block);
+        return emptyCells;
+    }
 
-        return candidates;
+    public int GetCandidatesMask(int index)
+    {
+        var rowMask = Rows[index.RowIndex()].GetMaskValue();
+        var columnMask = Columns[index.ColumnIndex()].GetMaskValue();
+        var blockMask = Blocks[index.BlockIndex()].GetMaskValue();
+
+        var candidatesMask = Bitmask.All.Value & ~(rowMask | columnMask | blockMask);
+
+        return candidatesMask;
     }
 
     private void CreateCells()

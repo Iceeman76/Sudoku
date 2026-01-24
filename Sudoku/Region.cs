@@ -2,20 +2,13 @@
 
 namespace Sudoku;
 
-public class Region : IEnumerable<Cell>
+public class Region(Cell[] cells) : IEnumerable<Cell>
 {
-    private readonly Cell[] _cells;
-
-    public Cell this[int index] => _cells[index];
-
-    public Region(IEnumerable<Cell> cells)
-    {
-        _cells = cells.ToArray();
-    }
+    public Cell this[int index] => cells[index];
 
     public void CalculateCandidates()
     {
-        foreach (var cell in _cells)
+        foreach (var cell in cells)
         {
             cell.CalculateCandidates();
         }
@@ -23,22 +16,29 @@ public class Region : IEnumerable<Cell>
 
     public void RemoveCandidate(int value)
     {
-        foreach (var cell in _cells)
+        foreach (var cell in cells)
         {
             cell.Candidates.Remove(value);
         }
     }
 
-    public IEnumerable<Cell> GetCellsWithCandidate(int candidate)
+    public int GetMaskValue()
     {
-        return _cells.Where(x => x.Candidates.Contains(candidate));
+        var mask = 0;
+
+        for (var i = 0; i < 9; i++)
+        {
+            if (cells[i].Value > 0) mask |= 1 << cells[i].Value;
+        }
+
+        return mask;
     }
 
-    // public IEnumerable<Cell> GetCellsWithAllCandidates(params int[] candidates)
-    // {
-    // 	return _cells.Where(x => x.Candidates.ContainsAll(candidates));
-    // }
+    public IEnumerable<Cell> GetCellsWithCandidate(int candidate)
+    {
+        return cells.Where(x => x.Candidates.Contains(candidate));
+    }
 
-    public IEnumerator<Cell> GetEnumerator() => ((IEnumerable<Cell>)_cells).GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => _cells.GetEnumerator();
+    public IEnumerator<Cell> GetEnumerator() => ((IEnumerable<Cell>)cells).GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => cells.GetEnumerator();
 }

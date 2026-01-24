@@ -14,33 +14,10 @@ public record Bitmask
 
     public void Clear() => Value = 0;
 
-    public void SetValues(IEnumerable<int> values)
-    {
-        foreach (var value in values)
-        {
-            Value |= 1 << value;
-        }
-    }
-
-    public Bitmask SetValue(int value)
-    {
-        Value |= 1 << value;
-        return this;
-    }
-
+    public void SetValue(int value) => Value |= 1 << value;
+    public void SetMask(int mask) => Value |= mask;
     public void Remove(int value) => Value &= ~(1 << value);
     public bool Contains(int value) => (Value >> value & 1) == 1;
-
-    // public bool ContainsAll(params int[] values)
-    // {
-    // 	// This method can be optimized by using bit operations instead
-    // 	foreach (var value in values)
-    // 	{
-    // 		if (!Contains(value)) return false;
-    // 	}
-    //
-    // 	return true;
-    // }
 
     public IEnumerable<int> Values
     {

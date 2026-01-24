@@ -37,8 +37,14 @@ public static partial class Technique
                 }
 
                 if (candidates.Count != 2) continue;
-                cells[0].Candidates = new Bitmask().SetValue(candidates[0]).SetValue(candidates[1]);
-                cells[1].Candidates = new Bitmask().SetValue(candidates[0]).SetValue(candidates[1]);
+                
+                cells[0].Candidates = new Bitmask();
+                cells[0].Candidates.SetValue(candidates[0]);
+                cells[0].Candidates.SetValue(candidates[1]);
+                
+                cells[1].Candidates = new Bitmask();
+                cells[1].Candidates.SetValue(candidates[0]);
+                cells[1].Candidates.SetValue(candidates[1]);
                 //Debug.WriteLine($"Hidden pair ({cells[0].Name}, {cells[1].Name}): ({string.Join(", ", candidates)})");
                 return true;
             }
