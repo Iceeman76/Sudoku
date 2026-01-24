@@ -4,7 +4,7 @@ public static partial class Technique
 {
     public static bool Backtracking(Board board)
     {
-        var cell = board.GetAllEmptyCells().OrderBy(x => x.Candidates.Count).FirstOrDefault();
+        var cell = board.GetAllEmptyCells().MinBy(x => x.Candidates.Count);
 
         if (cell == null) return true;
         if (cell.Candidates.Count == 0) return false;
