@@ -4,15 +4,16 @@ public static partial class Technique
 {
     public static bool HiddenSingles(IEnumerable<Cell> emptyCells)
     {
-        // TODO: LINQ
-        var cells = emptyCells.Where(x => x.Candidates.Count > 1);
-
-        foreach (var cell in cells)
+        foreach (var cell in emptyCells)
         {
-            // TODO: LINQ
-            if (cell.Candidates.Values.Any(value => FindHiddenSingle(cell, value)))
+            if (cell.Candidates.Count <= 1) continue;
+
+            for (var value = 1; value <= 9; value++)
             {
-                return true;
+                if (cell.Candidates.Contains(value) && FindHiddenSingle(cell, value))
+                {
+                    return true;
+                }
             }
         }
 
@@ -23,10 +24,19 @@ public static partial class Technique
     {
         foreach (var region in cell.Regions)
         {
-            // TODO: LINQ
-            if (region.GetCellsWithCandidate(value).Count() != 1) continue;
+            var count = 0;
+
+            for (var i = 0; i < 9; i++)
+            {
+                if (region[i].Candidates.Contains(value))
+                {
+                    count++;
+                }
+            }
+
+            if (count != 1) continue;
             cell.Value = value;
-            //Debug.WriteLine($"Hidden single {cell.Name}:{value}");
+
             return true;
         }
 
