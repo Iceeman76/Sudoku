@@ -22,12 +22,13 @@ public static class Program
     {
         Console.WriteLine($"File: {fileName}");
         Console.WriteLine($"Thread count: {threadCount}");
-        Console.WriteLine($"Puzzle count: {num}");
 
         // TODO: LINQ
         var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
+        Console.WriteLine($"Puzzle count: {lines.Length}");
+
         var sw = Stopwatch.StartNew();
-        var interval = num / 20;
+        var interval = lines.Length / 20;
 
         Parallel.For(0, threadCount, new ParallelOptions { MaxDegreeOfParallelism = threadCount }, threadIndex =>
         {
