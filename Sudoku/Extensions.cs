@@ -4,9 +4,9 @@ namespace Sudoku;
 
 public static class Extensions
 {
-    public static int RowIndex(this int index) => index / 9;
-    public static int ColumnIndex(this int index) => index % 9;
-    public static int BlockIndex(this int index) => index / 9 / 3 * 3 + index % 9 / 3;
+    public static int RowIndex(this int index) => Definitions.RowIndex[index];
+    public static int ColumnIndex(this int index) => Definitions.ColumnIndex[index];
+    public static int BlockIndex(this int index) => Definitions.BlockIndex[index];
 
     public static Region CreateRow(this Cell[] grid, int rowIndex)
     {
