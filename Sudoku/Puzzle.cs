@@ -13,7 +13,9 @@ public class Puzzle
     public Puzzle(string str)
     {
         Original = str;
+        // TODO: LINQ
         Values = str.Select(x => x - '0').ToArray();
+        // TODO: LINQ
         if (Values.Any(x => x > 9)) Valid = false;
     }
 }

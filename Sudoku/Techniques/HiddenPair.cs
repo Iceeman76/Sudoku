@@ -27,12 +27,15 @@ public static partial class Technique
                 if (cells[0].Candidates.Count < 3 && cells[1].Candidates.Count < 3) continue;
                 var common = cells[0].Candidates & cells[1].Candidates;
                 if (common.Count < 2) continue;
+                // TODO: LINQ
                 var candidates = common.Values.ToList();// TODO: Gör om detta.. kan kolla på bitmask istället
 
                 for (var k = candidates.Count - 1; k >= 0; k--)
                 {
                     var candidate = candidates[k];
+                    // TODO: LINQ
                     var y = region.GetCellsWithCandidate(candidate).Except(cells);
+                    // TODO: LINQ
                     if (y.Any()) candidates.Remove(candidate);
                 }
 

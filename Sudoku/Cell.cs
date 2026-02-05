@@ -28,7 +28,7 @@ public class Cell(Board board)
 
             Candidates.Clear();
 
-            foreach (var region in Regions!)
+            foreach (var region in Regions)
             {
                 region.RemoveCandidate(value);
             }

@@ -10,6 +10,7 @@ public static class SudokuSolver
 
         while (true)
         {
+            // TODO: LINQ
             var emptyCells = board.GetAllEmptyCells().ToArray();
 
             if (emptyCells.Length == 0) break;

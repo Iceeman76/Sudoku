@@ -36,6 +36,7 @@ public class Region(Cell[] cells) : IEnumerable<Cell>
 
     public IEnumerable<Cell> GetCellsWithCandidate(int candidate)
     {
+        // TODO: LINQ
         return cells.Where(x => x.Candidates.Contains(candidate));
     }
 

@@ -1,18 +1,20 @@
-﻿namespace Sudoku.Techniques;
+﻿using System.Numerics;
+
+namespace Sudoku.Techniques;
 
 public static partial class Technique
 {
-    public static bool NakedSingles(IEnumerable<Cell> emptyCells)
+    public static bool NakedSingles(Cell[] emptyCells)
     {
-        var nakedSingles = emptyCells.Where(cell => cell.Candidates.Count == 1).ToList();
-        if (nakedSingles.Count == 0) return false;
+        var nakedSingleFound = false;
 
-        nakedSingles.ForEach(cell =>
+        foreach (var cell in emptyCells)
         {
-            cell.Value = cell.Candidates.Values.Single();
-            //Debug.WriteLine($"Naked single {cell.Name}:{cell.Value}");
-        });
+            if (cell.Candidates.Count != 1) continue;
+            cell.Value = BitOperations.TrailingZeroCount(cell.Candidates.Value);
+            nakedSingleFound = true;
+        }
 
-        return true;
+        return nakedSingleFound;
     }
 }

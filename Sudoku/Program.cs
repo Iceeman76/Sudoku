@@ -24,6 +24,7 @@ public static class Program
         Console.WriteLine($"Thread count: {threadCount}");
         Console.WriteLine($"Puzzle count: {num}");
 
+        // TODO: LINQ
         var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
         var sw = Stopwatch.StartNew();
         var interval = num / 20;
@@ -53,7 +54,7 @@ public static class Program
     public static void Main(string[] args)
     {
         var threadCount = args.Length >= 1 ? int.Parse(args[0]) : 4;
-        var puzzleCount = args.Length >= 2 ? int.Parse(args[1]) : 500_000;
+        var puzzleCount = args.Length >= 2 ? int.Parse(args[1]) : 400_000;
 
         SolveFile(@".\sudoku.csv", puzzleCount, threadCount);
     }

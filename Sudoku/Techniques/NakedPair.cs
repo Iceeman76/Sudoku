@@ -19,6 +19,7 @@ public static partial class Technique
     private static bool FindNakedPair(Region region)
     {
         //TODO: Clean up this code and do not depend on the number 2 because we will need more later
+        // TODO: LINQ
         var c = region
             .Where(x => x.Candidates.Count == 2)
             .GroupBy(x => x.Candidates.Value)
@@ -30,8 +31,10 @@ public static partial class Technique
         var cells = c[0].ToArray();
         var candidates = cells[0].Candidates.Values.ToArray();
 
+        // TODO: LINQ
         var y1 = region.GetCellsWithCandidate(candidates[0]).Except(cells).ToList();
         y1.ForEach(x => x.Candidates.Remove(candidates[0]));
+        // TODO: LINQ
         var y2 = region.GetCellsWithCandidate(candidates[1]).Except(cells).ToList();
         y2.ForEach(x => x.Candidates.Remove(candidates[1]));
         if (y1.Count == 0 && y2.Count == 0) return false;
