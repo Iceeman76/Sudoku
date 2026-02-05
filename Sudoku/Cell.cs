@@ -6,10 +6,10 @@ public class Cell(Board board)
     public Bitmask Candidates = Bitmask.All;
     public int Index;
 
-    private string Name => $"{(char)(Index.RowIndex() + 'A')}{Index.ColumnIndex() + 1}";
-    private Region Row => board.Rows[Index.RowIndex()];
-    private Region Column => board.Columns[Index.ColumnIndex()];
-    private Region Block => board.Blocks[Index.BlockIndex()];
+    private string Name => $"{(char)(Definitions.RowIndex[Index] + 'A')}{Definitions.ColumnIndex[Index] + 1}";
+    private Region Row => board.Rows[Definitions.RowIndex[Index]];
+    private Region Column => board.Columns[Definitions.ColumnIndex[Index]];
+    private Region Block => board.Blocks[Definitions.BlockIndex[Index]];
 
     private int _value;
 

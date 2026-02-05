@@ -32,9 +32,9 @@ public class Board : IEnumerable<Cell>
 
     public int GetCandidatesMask(int index)
     {
-        var rowMask = Rows[index.RowIndex()].GetMaskValue();
-        var columnMask = Columns[index.ColumnIndex()].GetMaskValue();
-        var blockMask = Blocks[index.BlockIndex()].GetMaskValue();
+        var rowMask = Rows[Definitions.RowIndex[index]].GetMaskValue();
+        var columnMask = Columns[Definitions.ColumnIndex[index]].GetMaskValue();
+        var blockMask = Blocks[Definitions.BlockIndex[index]].GetMaskValue();
 
         var candidatesMask = Bitmask.All.Value & ~(rowMask | columnMask | blockMask);
 

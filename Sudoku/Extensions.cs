@@ -4,10 +4,6 @@ namespace Sudoku;
 
 public static class Extensions
 {
-    public static int RowIndex(this int index) => Definitions.RowIndex[index];
-    public static int ColumnIndex(this int index) => Definitions.ColumnIndex[index];
-    public static int BlockIndex(this int index) => Definitions.BlockIndex[index];
-
     public static Region CreateRow(this Cell[] grid, int rowIndex)
     {
         var row = new Cell[9];
