@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Text;
+﻿using System.Text;
 
 namespace Sudoku;
 
@@ -7,7 +6,7 @@ public static class Extensions
 {
     public static int RowIndex(this int index) => index / 9;
     public static int ColumnIndex(this int index) => index % 9;
-    public static int BlockIndex(this int index) => RowIndex(index) / 3 * 3 + ColumnIndex(index) / 3;
+    public static int BlockIndex(this int index) => index / 9 / 3 * 3 + index % 9 / 3;
 
     public static Region CreateRow(this Cell[] grid, int rowIndex)
     {
@@ -36,11 +35,11 @@ public static class Extensions
     public static Region CreateBlock(this Cell[] grid, int blockIndex)
     {
         var block = new Cell[9];
-        var indicies = Definitions.Block[blockIndex];
+        var indices = Definitions.Block[blockIndex];
 
         for (var i = 0; i < 9; i++)
         {
-            block[i] = grid[indicies[i]];
+            block[i] = grid[indices[i]];
         }
 
         return new Region(block);

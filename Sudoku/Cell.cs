@@ -2,9 +2,9 @@
 
 public class Cell(Board board)
 {
-    public Region[] Regions { get; private set; } = null!;
-    public Bitmask Candidates { get; set; } = Bitmask.All;
-    public int Index { get; init; }
+    public Region[] Regions = null!;
+    public Bitmask Candidates = Bitmask.All;
+    public int Index;
 
     private string Name => $"{(char)(Index.RowIndex() + 'A')}{Index.ColumnIndex() + 1}";
     private Region Row => board.Rows[Index.RowIndex()];

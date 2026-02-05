@@ -20,7 +20,8 @@ public class Board : IEnumerable<Cell>
 
     public List<Cell> GetAllEmptyCells()
     {
-        var emptyCells = new List<Cell>();
+        var emptyCells = new List<Cell>(capacity: 81);
+
         for (var i = 0; i < 81; i++)
         {
             if (_grid[i].Value == 0) emptyCells.Add(_grid[i]);
@@ -56,14 +57,18 @@ public class Board : IEnumerable<Cell>
             Columns[i] = _grid.CreateColumn(i);
             Blocks[i] = _grid.CreateBlock(i);
         }
+
+        for (var i = 0; i < 81; i++)
+        {
+            _grid[i].CreateRegions();
+        }
     }
 
     private void SetValues(Puzzle puzzle)
     {
         for (var i = 0; i < 81; i++)
         {
-            this[i].CreateRegions();
-            if (puzzle[i] > 0) this[i].Value = puzzle[i];
+            if (puzzle[i] > 0) _grid[i].Value = puzzle[i];
         }
     }
 
