@@ -23,8 +23,7 @@ public static class Program
         Console.WriteLine($"File: {fileName}");
         Console.WriteLine($"Thread count: {threadCount}");
 
-        // TODO: LINQ
-        var lines = File.ReadLines(fileName).Take(num).Select(x => new Line(x)).ToArray();
+        var lines = File.ReadLines(fileName).Take(num).Select(line => new Line(line)).ToArray();
         Console.WriteLine($"Puzzle count: {lines.Length}");
 
         var sw = Stopwatch.StartNew();
