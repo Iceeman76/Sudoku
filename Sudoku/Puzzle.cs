@@ -9,10 +9,20 @@ public class Puzzle
 
     public Puzzle(string str)
     {
-        var values = new int[str.Length];
-
-        for (var i = 0; i < str.Length; i++)
+        if (str.Length != 81)
         {
+            throw new ArgumentException($"Puzzle string must be exactly 81 characters, got {str.Length}.", nameof(str));
+        }
+
+        var values = new int[81];
+
+        for (var i = 0; i < 81; i++)
+        {
+            if (str[i] < '0' || str[i] > '9')
+            {
+                throw new ArgumentException($"Invalid character '{str[i]}' at position {i}.", nameof(str));
+            }
+
             values[i] = str[i] - '0';
         }
 

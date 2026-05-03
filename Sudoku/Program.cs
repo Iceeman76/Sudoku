@@ -27,7 +27,7 @@ public static class Program
         Console.WriteLine($"Puzzle count: {lines.Length}");
 
         var sw = Stopwatch.StartNew();
-        var interval = lines.Length / 20;
+        var interval = Math.Max(1, lines.Length / 20);
 
         Parallel.For(0, threadCount, new ParallelOptions { MaxDegreeOfParallelism = threadCount }, threadIndex =>
         {
@@ -42,7 +42,10 @@ public static class Program
                     Console.WriteLine($"Puzzle #{index:0000000} - {puzzle.Solution}");
                 }
 
-                //if (puzzle.Solution != lines[index].SolutionString) throw new Exception("Wrong solution");
+                // if (lines[index].SolutionString is not null && puzzle.Solution != lines[index].SolutionString)
+                // {
+                //     throw new Exception($"Wrong solution for puzzle #{index}: got {puzzle.Solution}");
+                // }
             }
         });
 

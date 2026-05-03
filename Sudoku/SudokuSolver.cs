@@ -20,7 +20,10 @@ public static class SudokuSolver
             if (Technique.NakedPair(board)) continue;
             if (Technique.HiddenPair(board)) continue;
 
-            Technique.Backtracking(board);
+            if (Technique.Backtracking(board) == false)
+            {
+                throw new InvalidOperationException("Puzzle has no solution.");
+            }
 
             break;
         }
