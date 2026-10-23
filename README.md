@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/sudoku-social-preview.png" alt="Sudoku logo" width="1040" />
+</div>
+
 # Sudoku Solver
 
 A high-performance C# Sudoku solver that uses human-style solving techniques before falling back to backtracking. Supports batch solving of large puzzle sets with multi-threaded parallelism.
