@@ -1,16 +1,17 @@
-﻿namespace Sudoku.Techniques;
+using System.Numerics;
+
+namespace Sudoku.Techniques;
 
 public static partial class Technique
 {
     public static bool HiddenPair(Board board)
     {
-        for (var i = 0; i < 9; i++)
+        for (var index = 0; index < 9; index++)
         {
-            var foundHiddenPair = FindHiddenPair(board.Blocks[i]) ||
-                                  FindHiddenPair(board.Rows[i]) ||
-                                  FindHiddenPair(board.Columns[i]);
-
-            if (foundHiddenPair) return true;
+            if (FindHiddenPair(board.Blocks[index]) || FindHiddenPair(board.Rows[index]) || FindHiddenPair(board.Columns[index]))
+            {
+                return true;
+            }
         }
 
         return false;
@@ -18,37 +19,44 @@ public static partial class Technique
 
     private static bool FindHiddenPair(Region region)
     {
-        //TODO: Clean up this code and do not depend on the number 2 because we will need more later
-        for (var i = 0; i < 8; i++)
+        for (var firstIndex = 0; firstIndex < 8; firstIndex++)
         {
-            for (var j = i + 1; j < 9; j++)
-            {
-                var cells = new[] { region[i], region[j] };
-                if (cells[0].Candidates.Count < 3 && cells[1].Candidates.Count < 3) continue;
-                var common = cells[0].Candidates & cells[1].Candidates;
-                if (common.Count < 2) continue;
-                // TODO: LINQ
-                var candidates = common.Values.ToList();// TODO: Gör om detta.. kan kolla på bitmask istället
+            var firstCell = region[firstIndex];
 
-                for (var k = candidates.Count - 1; k >= 0; k--)
+            for (var secondIndex = firstIndex + 1; secondIndex < 9; secondIndex++)
+            {
+                var secondCell = region[secondIndex];
+
+                if (firstCell.Candidates.Count < 3 && secondCell.Candidates.Count < 3)
                 {
-                    var candidate = candidates[k];
-                    // TODO: LINQ
-                    var y = region.GetCellsWithCandidate(candidate).Except(cells);
-                    // TODO: LINQ
-                    if (y.Any()) candidates.Remove(candidate);
+                    continue;
                 }
 
-                if (candidates.Count != 2) continue;
-                
-                cells[0].Candidates = new Bitmask();
-                cells[0].Candidates.SetValue(candidates[0]);
-                cells[0].Candidates.SetValue(candidates[1]);
-                
-                cells[1].Candidates = new Bitmask();
-                cells[1].Candidates.SetValue(candidates[0]);
-                cells[1].Candidates.SetValue(candidates[1]);
-                //Debug.WriteLine($"Hidden pair ({cells[0].Name}, {cells[1].Name}): ({string.Join(", ", candidates)})");
+                var pairMask = firstCell.Candidates.Value & secondCell.Candidates.Value;
+
+                if (BitOperations.PopCount((uint)pairMask) < 2)
+                {
+                    continue;
+                }
+
+                for (var index = 0; index < 9; index++)
+                {
+                    if (index == firstIndex || index == secondIndex)
+                    {
+                        continue;
+                    }
+
+                    pairMask &= ~region[index].Candidates.Value;
+                }
+
+                if (BitOperations.PopCount((uint)pairMask) is not 2)
+                {
+                    continue;
+                }
+
+                firstCell.Candidates.Intersect(pairMask);
+                secondCell.Candidates.Intersect(pairMask);
+
                 return true;
             }
         }

@@ -1,16 +1,15 @@
-﻿namespace Sudoku.Techniques;
+namespace Sudoku.Techniques;
 
 public static partial class Technique
 {
     public static bool NakedPair(Board board)
     {
-        for (var i = 0; i < 9; i++)
+        for (var index = 0; index < 9; index++)
         {
-            var foundNakedPair = FindNakedPair(board.Blocks[i]) ||
-                                 FindNakedPair(board.Rows[i]) ||
-                                 FindNakedPair(board.Columns[i]);
-
-            if (foundNakedPair) return true;
+            if (FindNakedPair(board.Blocks[index]) || FindNakedPair(board.Rows[index]) || FindNakedPair(board.Columns[index]))
+            {
+                return true;
+            }
         }
 
         return false;
@@ -18,27 +17,61 @@ public static partial class Technique
 
     private static bool FindNakedPair(Region region)
     {
-        //TODO: Clean up this code and do not depend on the number 2 because we will need more later
-        // TODO: LINQ
-        var c = region
-            .Where(x => x.Candidates.Count == 2)
-            .GroupBy(x => x.Candidates.Value)
-            .Where(g => g.Count() == 2)
-            .ToArray();
+        for (var firstIndex = 0; firstIndex < 8; firstIndex++)
+        {
+            var firstCell = region[firstIndex];
 
-        if (c.Length == 0) return false;
+            if (firstCell.Candidates.Count is not 2)
+            {
+                continue;
+            }
 
-        var cells = c[0].ToArray();
-        var candidates = cells[0].Candidates.Values.ToArray();
+            var pairMask = firstCell.Candidates.Value;
+            var matchingCells = 0;
+            var secondIndex = -1;
 
-        // TODO: LINQ
-        var y1 = region.GetCellsWithCandidate(candidates[0]).Except(cells).ToList();
-        // TODO: LINQ
-        var y2 = region.GetCellsWithCandidate(candidates[1]).Except(cells).ToList();
-        if (y1.Count == 0 && y2.Count == 0) return false;
-        y1.ForEach(x => x.Candidates.Remove(candidates[0]));
-        y2.ForEach(x => x.Candidates.Remove(candidates[1]));
-        //Debug.WriteLine($"Naked pair ({cells[0].Name}, {cells[1].Name}): ({string.Join(", ", candidates)})");
-        return true;
+            for (var index = 0; index < 9; index++)
+            {
+                if (region[index].Candidates.Value == pairMask)
+                {
+                    matchingCells++;
+
+                    if (index > firstIndex)
+                    {
+                        secondIndex = index;
+                    }
+                }
+            }
+
+            if (matchingCells is not 2 || secondIndex < 0)
+            {
+                continue;
+            }
+
+            var changed = false;
+
+            for (var index = 0; index < 9; index++)
+            {
+                if (index == firstIndex || index == secondIndex)
+                {
+                    continue;
+                }
+
+                var candidates = region[index].Candidates;
+
+                if ((candidates.Value & pairMask) is not 0)
+                {
+                    candidates.RemoveMask(pairMask);
+                    changed = true;
+                }
+            }
+
+            if (changed)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

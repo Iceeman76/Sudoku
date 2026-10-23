@@ -10,17 +10,34 @@ public static class SudokuSolver
 
         while (true)
         {
-            // TODO: LINQ
-            var emptyCells = board.GetAllEmptyCells().ToArray();
+            var emptyCells = board.GetAllEmptyCells();
 
-            if (emptyCells.Length == 0) break;
+            if (emptyCells.Count == 0)
+            {
+                break;
+            }
 
-            if (Technique.NakedSingles(emptyCells)) continue;
-            if (Technique.HiddenSingles(emptyCells)) continue;
-            if (Technique.NakedPair(board)) continue;
-            if (Technique.HiddenPair(board)) continue;
+            if (Technique.NakedSingles(emptyCells))
+            {
+                continue;
+            }
 
-            if (Technique.Backtracking(board) == false)
+            if (Technique.HiddenSingles(emptyCells))
+            {
+                continue;
+            }
+
+            if (Technique.NakedPair(board))
+            {
+                continue;
+            }
+
+            if (Technique.HiddenPair(board))
+            {
+                continue;
+            }
+
+            if (Technique.Backtracking(board) is false)
             {
                 throw new InvalidOperationException("Puzzle has no solution.");
             }
@@ -30,6 +47,6 @@ public static class SudokuSolver
 
         puzzle.Solution = board.ToAnnotationString();
 
-        return board; // TODO: Bättre vi gör ett nytt objekt som heter Solution som vi kan slänga in lite olika saker i och returnera
+        return board;
     }
 }

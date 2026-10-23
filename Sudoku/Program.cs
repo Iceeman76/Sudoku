@@ -41,11 +41,6 @@ public static class Program
                 {
                     Console.WriteLine($"Puzzle #{index:0000000} - {puzzle.Solution}");
                 }
-
-                // if (lines[index].SolutionString is not null && puzzle.Solution != lines[index].SolutionString)
-                // {
-                //     throw new Exception($"Wrong solution for puzzle #{index}: got {puzzle.Solution}");
-                // }
             }
         });
 

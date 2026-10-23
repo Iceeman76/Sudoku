@@ -2,7 +2,7 @@
 
 namespace Sudoku;
 
-public class Board : IEnumerable<Cell>
+public sealed class Board : IEnumerable<Cell>
 {
     public Cell this[int index] => _grid[index];
     public Region[] Rows { get; } = new Region[9];
@@ -24,7 +24,10 @@ public class Board : IEnumerable<Cell>
 
         for (var i = 0; i < 81; i++)
         {
-            if (_grid[i].Value == 0) emptyCells.Add(_grid[i]);
+            if (_grid[i].Value == 0)
+            {
+                emptyCells.Add(_grid[i]);
+            }
         }
 
         return emptyCells;
@@ -36,7 +39,7 @@ public class Board : IEnumerable<Cell>
         var columnMask = Columns[Definitions.ColumnIndex[index]].GetMaskValue();
         var blockMask = Blocks[Definitions.BlockIndex[index]].GetMaskValue();
 
-        var candidatesMask = Bitmask.All.Value & ~(rowMask | columnMask | blockMask);
+        var candidatesMask = Bitmask.AllValuesMask & ~(rowMask | columnMask | blockMask);
 
         return candidatesMask;
     }
@@ -68,7 +71,19 @@ public class Board : IEnumerable<Cell>
     {
         for (var i = 0; i < 81; i++)
         {
-            if (puzzle[i] > 0) _grid[i].Value = puzzle[i];
+            var value = puzzle[i];
+
+            if (value == 0)
+            {
+                continue;
+            }
+
+            if (_grid[i].Candidates.Contains(value) is false)
+            {
+                throw new ArgumentException($"Duplicate value '{value}' at position {i}.", nameof(puzzle));
+            }
+
+            _grid[i].Value = value;
         }
     }
 

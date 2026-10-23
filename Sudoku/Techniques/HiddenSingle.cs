@@ -6,7 +6,10 @@ public static partial class Technique
     {
         foreach (var cell in emptyCells)
         {
-            if (cell.Candidates.Count <= 1) continue;
+            if (cell.Candidates.Count <= 1)
+            {
+                continue;
+            }
 
             for (var value = 1; value <= 9; value++)
             {
@@ -31,10 +34,19 @@ public static partial class Technique
                 if (region[i].Candidates.Contains(value))
                 {
                     count++;
+
+                    if (count > 1)
+                    {
+                        break;
+                    }
                 }
             }
 
-            if (count != 1) continue;
+            if (count is not 1)
+            {
+                continue;
+            }
+
             cell.Value = value;
 
             return true;
