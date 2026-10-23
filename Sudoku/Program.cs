@@ -51,9 +51,11 @@ public static class Program
 
     public static void Main(string[] args)
     {
-        var threadCount = args.Length >= 1 ? int.Parse(args[0]) : 4;
-        var puzzleCount = args.Length >= 2 ? int.Parse(args[1]) : 400_000;
+        var puzzleFile = args[0];
 
-        SolveFile(@".\sudoku.csv", puzzleCount, threadCount);
+        var threadCount = args.Length >= 2 ? int.Parse(args[0]) : 4;
+        var puzzleCount = args.Length >= 3 ? int.Parse(args[1]) : 400_000;
+
+        SolveFile(puzzleFile, puzzleCount, threadCount);
     }
 }
