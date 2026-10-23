@@ -53,8 +53,8 @@ public static class Program
     {
         var puzzleFile = args[0];
 
-        var threadCount = args.Length >= 2 ? int.Parse(args[0]) : 4;
-        var puzzleCount = args.Length >= 3 ? int.Parse(args[1]) : 400_000;
+        var threadCount = args.Length >= 2 ? int.Parse(args[1]) : 4;
+        var puzzleCount = args.Length >= 3 ? int.Parse(args[2]) : 400_000;
 
         SolveFile(puzzleFile, puzzleCount, threadCount);
     }
