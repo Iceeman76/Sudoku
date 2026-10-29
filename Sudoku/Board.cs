@@ -1,8 +1,6 @@
-﻿using System.Collections;
+namespace DotNetLab.Sudoku;
 
-namespace Sudoku;
-
-public sealed class Board : IEnumerable<Cell>
+public sealed class Board
 {
     public Cell this[int index] => _grid[index];
     public Region[] Rows { get; } = new Region[9];
@@ -86,7 +84,4 @@ public sealed class Board : IEnumerable<Cell>
             _grid[i].Value = value;
         }
     }
-
-    public IEnumerator<Cell> GetEnumerator() => ((IEnumerable<Cell>)_grid).GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => _grid.GetEnumerator();
 }

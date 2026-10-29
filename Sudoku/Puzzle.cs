@@ -1,4 +1,4 @@
-﻿namespace Sudoku;
+﻿namespace DotNetLab.Sudoku;
 
 public class Puzzle
 {

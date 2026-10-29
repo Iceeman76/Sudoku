@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <LangVersion>13</LangVersion>
+        <RootNamespace>DotNetLab.SudokuTests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

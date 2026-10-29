@@ -1,7 +1,8 @@
-﻿using NUnit.Framework;
-using Sudoku;
+using System.Text;
+using DotNetLab.Sudoku;
+using NUnit.Framework;
 
-namespace SudokuTests;
+namespace DotNetLab.SudokuTests;
 
 [TestFixture]
 public class PuzzleTests
@@ -29,12 +30,31 @@ public class PuzzleTests
         var puzzle = new Puzzle(puzzleStr);
         var board = new Board(puzzle);
 
-        TestContext.WriteLine(board.ToDisplayString());
+        TestContext.WriteLine(ToDisplayString(board));
 
         var solution = SudokuSolver.Solve(puzzle);
 
-        TestContext.WriteLine(solution.ToDisplayString());
+        TestContext.WriteLine(ToDisplayString(solution));
 
         return puzzle.Solution;
+    }
+
+    private static string ToDisplayString(Board board)
+    {
+        var display = new StringBuilder();
+
+        for (var index = 0; index < 81; index++)
+        {
+            var value = board[index].Value;
+            var text = value == 0 ? "." : value.ToString();
+            display.Append(text).Append(' ');
+
+            if ((index + 1) % 9 == 0)
+            {
+                display.AppendLine();
+            }
+        }
+
+        return display.ToString();
     }
 }

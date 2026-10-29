@@ -1,6 +1,6 @@
-﻿using Sudoku.Techniques;
+﻿using DotNetLab.Sudoku.Techniques;
 
-namespace Sudoku;
+namespace DotNetLab.Sudoku;
 
 public static class SudokuSolver
 {

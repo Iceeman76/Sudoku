@@ -1,19 +1,12 @@
 ﻿using System.Diagnostics;
 
-namespace Sudoku;
+namespace DotNetLab.Sudoku;
 
-public record Line
+public sealed record Line
 {
-    public Line(string str)
-    {
-        var tuple = str.Split(',');
-
-        PuzzleString = tuple[0];
-        SolutionString = tuple.Length > 1 ? tuple[1] : null;
-    }
+    public Line(string str) => PuzzleString = str.Split(',')[0];
 
     public string PuzzleString { get; }
-    public string? SolutionString { get; }
 }
 
 public static class Program

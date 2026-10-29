@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Sudoku;
+namespace DotNetLab.Sudoku;
 
 public static class Extensions
 {
@@ -39,21 +39,6 @@ public static class Extensions
         }
 
         return new Region(block);
-    }
-
-    public static string ToDisplayString(this Board board)
-    {
-        var sb = new StringBuilder();
-
-        for (var i = 1; i <= 81; i++)
-        {
-            var v = board[i - 1].Value;
-            var c = v == 0 ? "." : v.ToString();
-            sb.Append(c).Append(' ');
-            if (i % 9 == 0) sb.AppendLine();
-        }
-
-        return sb.ToString();
     }
 
     public static string ToAnnotationString(this Board board)

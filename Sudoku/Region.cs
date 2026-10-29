@@ -1,8 +1,6 @@
-﻿using System.Collections;
+namespace DotNetLab.Sudoku;
 
-namespace Sudoku;
-
-public sealed class Region(Cell[] cells) : IEnumerable<Cell>
+public sealed class Region(Cell[] cells)
 {
     public Cell this[int index] => cells[index];
 
@@ -36,7 +34,4 @@ public sealed class Region(Cell[] cells) : IEnumerable<Cell>
 
         return mask;
     }
-
-    public IEnumerator<Cell> GetEnumerator() => ((IEnumerable<Cell>)cells).GetEnumerator();
-    IEnumerator IEnumerable.GetEnumerator() => cells.GetEnumerator();
 }

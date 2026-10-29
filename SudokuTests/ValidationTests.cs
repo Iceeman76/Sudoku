@@ -1,8 +1,8 @@
 using System;
+using DotNetLab.Sudoku;
 using NUnit.Framework;
-using Sudoku;
 
-namespace SudokuTests;
+namespace DotNetLab.SudokuTests;
 
 [TestFixture]
 public sealed class ValidationTests

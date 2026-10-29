@@ -1,4 +1,4 @@
-namespace Sudoku.Techniques;
+namespace DotNetLab.Sudoku.Techniques;
 
 public static partial class Technique
 {

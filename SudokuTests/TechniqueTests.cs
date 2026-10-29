@@ -1,8 +1,9 @@
+using System.Collections.Generic;
+using DotNetLab.Sudoku;
+using DotNetLab.Sudoku.Techniques;
 using NUnit.Framework;
-using Sudoku;
-using Sudoku.Techniques;
 
-namespace SudokuTests;
+namespace DotNetLab.SudokuTests;
 
 [TestFixture]
 public sealed class TechniqueTests
@@ -31,7 +32,7 @@ public sealed class TechniqueTests
         var changed = Technique.NakedPair(board);
 
         Assert.That(changed, Is.True);
-        Assert.That(board[4].Candidates.Values, Is.EqualTo([5]));
+        Assert.That(GetCandidateValues(board[4]), Is.EqualTo([5]));
     }
 
     [Test]
@@ -63,8 +64,8 @@ public sealed class TechniqueTests
         SetCandidates(board[1], 1, 2, 4);
 
         Assert.That(Technique.HiddenPair(board), Is.True);
-        Assert.That(board[0].Candidates.Values, Is.EqualTo([1, 2]));
-        Assert.That(board[1].Candidates.Values, Is.EqualTo([1, 2]));
+        Assert.That(GetCandidateValues(board[0]), Is.EqualTo([1, 2]));
+        Assert.That(GetCandidateValues(board[1]), Is.EqualTo([1, 2]));
         Assert.That(board[2].Candidates.Count, Is.EqualTo(7));
         Assert.That(Technique.HiddenPair(board), Is.False);
     }
@@ -80,9 +81,9 @@ public sealed class TechniqueTests
 
         Assert.That(Technique.Backtracking(board), Is.False);
         Assert.That(board.ToAnnotationString(), Is.EqualTo(new string('0', 81)));
-        Assert.That(board[0].Candidates.Values, Is.EqualTo([1, 2]));
-        Assert.That(board[1].Candidates.Values, Is.EqualTo([1, 2]));
-        Assert.That(board[2].Candidates.Values, Is.EqualTo([1, 2]));
+        Assert.That(GetCandidateValues(board[0]), Is.EqualTo([1, 2]));
+        Assert.That(GetCandidateValues(board[1]), Is.EqualTo([1, 2]));
+        Assert.That(GetCandidateValues(board[2]), Is.EqualTo([1, 2]));
     }
 
     [Test]
@@ -106,13 +107,24 @@ public sealed class TechniqueTests
         }
     }
 
+    private static IEnumerable<int> GetCandidateValues(Cell cell)
+    {
+        for (var value = 1; value <= 9; value++)
+        {
+            if (cell.Candidates.Contains(value))
+            {
+                yield return value;
+            }
+        }
+    }
+
     private static void SetCandidates(Cell cell, params int[] values)
     {
         cell.Candidates.Clear();
 
         foreach (var value in values)
         {
-            cell.Candidates.SetValue(value);
+            cell.Candidates.SetMask(1 << value);
         }
     }
 }
